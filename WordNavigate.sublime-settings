@@ -1,0 +1,14 @@
+{
+  "word_navigate_ignored_scopes" : ["constant.numeric","comment","string"],
+  "word_navigate_expand_first" : true,
+  "word_navigate_wrap" : true,
+
+  "log_level" : "debug",
+  "use_index" : true,
+
+  "allow_multiple_words" : false,
+  "expand_first" : true,
+  "wrap_buffer" : true,
+  "wrap_line" : true,
+  "case_sensitive" : false,
+}
