@@ -30,10 +30,10 @@ class WordNavigatePreviousCommand(sublime_plugin.WindowCommand):
         logger = logging.getLogger(__name__)
 
         from .python import word_navigate
-        from .python import sublime_util
+        from .python.sublime_util import util
 
         logger.info("Running command to find previous word.")
-        with sublime_util.time_this('Navigated to previous word in'):
+        with util.time_this('Navigated to previous word in'):
             word_navigate.navigate_backward(self.window.active_view())
 
 class WordNavigateNextCommand(sublime_plugin.WindowCommand):
@@ -45,10 +45,10 @@ class WordNavigateNextCommand(sublime_plugin.WindowCommand):
         logger = logging.getLogger(__name__)
 
         from .python import word_navigate
-        from .python import sublime_util
+        from .python.sublime_util import util
 
         logger.info("Running command to find next word.")
-        with sublime_util.time_this('Navigated to next word in'):
+        with util.time_this('Navigated to next word in'):
             word_navigate.navigate_forward(self.window.active_view())
 
 class WordNavigatePreviousInLineCommand(sublime_plugin.WindowCommand):
@@ -60,10 +60,10 @@ class WordNavigatePreviousInLineCommand(sublime_plugin.WindowCommand):
         logger = logging.getLogger(__name__)
 
         from .python import word_navigate
-        from .python import sublime_util
+        from .python.sublime_util import util
 
-        logger.info("Running command to find previous word on same line.")
-        with sublime_util.time_this('Navigated to previous word in'):
+        logger.info("Running command to find previous word on the same line.")
+        with util.time_this('Navigated to previous word in'):
             word_navigate.navigate_backward_in_line(self.window.active_view())
 
 class WordNavigateNextInLineCommand(sublime_plugin.WindowCommand):
@@ -75,8 +75,8 @@ class WordNavigateNextInLineCommand(sublime_plugin.WindowCommand):
         logger = logging.getLogger(__name__)
 
         from .python import word_navigate
-        from .python import sublime_util
+        from .python.sublime_util import util
 
-        logger.info("Running command to find next word on same line.")
-        with sublime_util.time_this('Navigated to next word in'):
+        logger.info("Running command to find next word on the same line.")
+        with util.time_this('Navigated to next word in'):
             word_navigate.navigate_forward_in_line(self.window.active_view())

@@ -7,7 +7,6 @@ from .sublime_util import log
 log.reinit(settings_module)
 
 from . import index
-from . import util
 from .settings import settings
 from .sublime_util import view as view_util
 from .sublime_util import selection
@@ -35,7 +34,7 @@ def _get_region_of_word_closest_to_region(view   : sublime.View,
     Gets the region of the word closest to a region
 
     :param view:    The applicable view
-    :param region:    The applicable region
+    :param region:  The applicable region
     :param forward: Whether to move forwards or backwards
     """
 
@@ -172,11 +171,9 @@ def _get_region_of_closest_word_in_line(view     : sublime.View,
     region = selection.get_single_selected_region(view)
 
     if view_util.is_not_part_of_any_word(view, region):
-        logger.debug(f"No word selected ('{view.substr(region)}').")
+        logger.debug(f"No word selected ('{view.substr(region)}') - finding closest.")
         caret_pt = selection.get_caret_point(view)
-        return view_util.get_region_of_closest_word_in_line(
-            view, caret_pt, forward, settings.wrap_line)
-    elif view_util.is_single_word(view, region):
+    elif view_util.is_single_complete_word(view, region):
         logger.debug(f"Single word '{view.substr(region)}' selected.")
         word_region = region
     else:
@@ -185,7 +182,11 @@ def _get_region_of_closest_word_in_line(view     : sublime.View,
         if settings.expand_first:
             logger.debug(f"'{view.substr(region)}' not a word - expanding to word.")
             caret_pt = selection.get_caret_point(view)
-            return view_util.get_closest_word_region_from_pt(view, caret_pt, True)
+            region = view_util.get_closest_word_region_from_pt(view, caret_pt, True)
+            if forward:
+                return region
+            else:
+                return selection.reverse_region(region)
         else:
             logger.debug(f"Text within a word ('{view.substr(region)}') selected.")
             word_region = view.word(region)
