@@ -1,0 +1,3 @@
+[submodule "python/sublime_util"]
+	path = python/sublime_util
+	url = git@github.com:Pyrdon/Sublime-Util.git
