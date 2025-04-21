@@ -31,5 +31,5 @@ jobs:
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
-        git commit --amend --no-edit
+        git commit -m "Extracted all submodules for creation of release."
         git push origin HEAD
