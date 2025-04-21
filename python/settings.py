@@ -63,6 +63,7 @@ class Settings(settings.Settings):
         self._settings.add(settings.BooleanSetting('wrap_buffer', True))
         self._settings.add(settings.BooleanSetting('wrap_line', True))
         self._settings.add(settings.BooleanSetting('case_sensitive', False))
+        self._settings.add(settings.BooleanSetting('mark_adjacent', True))
 
         # Call this once on creation to set it up
         self._on_settings_change()

@@ -1,4 +1,7 @@
+import sublime
 import sublime_plugin
+
+from typing import List, Set, Dict, Tuple
 
 def plugin_loaded():
     """
@@ -80,3 +83,24 @@ class WordNavigateNextInLineCommand(sublime_plugin.WindowCommand):
         logger.info("Running command to find next word on the same line.")
         with util.time_this('Navigated to next word in'):
             word_navigate.navigate_forward_in_line(self.window.active_view())
+
+class SelectionListener(sublime_plugin.ViewEventListener):
+    # def on_init(self, views : List[sublime.View]):
+        # import logging
+        # logger = logging.getLogger(__name__)
+
+        # from .python import word_navigate
+        # from .python.sublime_util import util
+
+        # for v in views:
+        #     logger.debug(f"Initializing selection listener for view '{v.file_name()}'.")
+
+    def on_selection_modified_async(self):
+        import logging
+        logger = logging.getLogger(__name__)
+
+        from .python import word_navigate
+        from .python.sublime_util import util
+
+        with util.time_this('Marked adjacent words in'):
+            word_navigate.mark_adajcent_words(self.view)

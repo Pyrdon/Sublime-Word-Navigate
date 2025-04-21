@@ -11,4 +11,6 @@
   "wrap_buffer" : true,
   "wrap_line" : true,
   "case_sensitive" : false,
+
+  "mark_adjacent" : true,
 }

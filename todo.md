@@ -1,8 +1,10 @@
 # Settings
 Wrap around or not
 Indicate previous and next word selected
+Color of indication
 Use index
 Index max size etc.?
+Indexed syntaxes?
 Ignored scopes for next/previous keyword on line
 Ignored scopes for next/previous word
 Expand on word first

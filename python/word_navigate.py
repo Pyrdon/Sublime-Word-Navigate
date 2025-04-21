@@ -19,6 +19,8 @@ import sublime_plugin
 
 from typing import Union
 
+ADJACENT_WORD_MARK = "word_navigate_mark_adjacent"
+
 def plugin_unloaded():
     """
     Called when plugin is unloaded
@@ -98,6 +100,19 @@ def _get_region_of_word_closest_to_region(view   : sublime.View,
                     "- finding closest.")
                 word_region = view.word(region)
 
+    return _get_region_of_closest_same_word(view, word_region, forward)
+
+def _get_region_of_closest_same_word(view   : sublime.View,
+                                     region  : sublime.Region,
+                                     forward : bool) -> sublime.Region:
+    """
+    Gets the region of the closest same word
+
+    :param view:    The applicable view
+    :param region:  The applicable region
+    :param forward: Whether to move forwards or backwards
+    """
+
     # Get index if we are using it
     _id = view.buffer().id()
 
@@ -114,7 +129,7 @@ def _get_region_of_word_closest_to_region(view   : sublime.View,
         # Error getting index or not using it
         logger.debug(f"No index - navigating manually.")
         return view_util.get_region_of_closet_same_word(
-            view, word_region, forward, settings.wrap_buffer, settings.case_sensitive)
+            view, region, forward, settings.wrap_buffer, settings.case_sensitive)
 
 def _get_region_of_word_closest_to_selection(view     : sublime.View,
                                              forward  : bool
@@ -252,3 +267,35 @@ def navigate_forward_in_line(view : sublime.View) -> None:
     """
 
     return _navigate_in_line(view, True)
+
+def mark_adajcent_words(view : sublime.View) -> None:
+    """
+    Marks words adjacent to the currently selected (if any adjacent, and if any selected)
+
+    :param view: The applicable view
+    """
+    view.erase_regions(ADJACENT_WORD_MARK)
+
+    if not settings.mark_adjacent:
+        return
+
+    try:
+        region = selection.get_single_selected_region(view)
+    except RuntimeError as e:
+        logger.warning("Multiple regions selected - doing nothing.")
+        return
+
+    if view_util.is_single_complete_word(view, region):
+        regions_to_mark = []
+        prev_word_region = _get_region_of_closest_same_word(
+            view, region, False)
+        if prev_word_region.end() < region.end():
+            regions_to_mark.append(prev_word_region)
+
+        next_word_region = _get_region_of_closest_same_word(
+            view, region, True)
+        if next_word_region.end() > region.end():
+            regions_to_mark.append(next_word_region)
+        logger.debug(f"Found adjacent words {prev_word_region} and {next_word_region}.")
+
+        view.add_regions(ADJACENT_WORD_MARK, regions_to_mark, "string", icon = "dot")
