@@ -1,0 +1,32 @@
+name: Extract submodules
+
+on:
+  push:
+    branches:
+      - release-*
+
+jobs:
+  flatten:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Run extraction script
+      run: python python/sublime_util/extract_submodules.py -v --apply
+
+    - name: Commit and push changes
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git commit --amend --no-edit
+        git push origin HEAD
